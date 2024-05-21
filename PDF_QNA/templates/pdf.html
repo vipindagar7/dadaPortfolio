@@ -1,0 +1,62 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/styles2.css' %}">
+    <title>PDF_QNA</title>
+</head>
+<body>
+    <div id="top">
+    <form  id = 'back_button_form' action="{% url 'portfolio:index' %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <button id = 'back_button_icon' type="submit">Back</button>
+    </form>
+    <a href="https://github.com/Kunal-Shaw-097/PDF-QNA" target="_blank"><img id='github_icon' src="{% static 'github.png' %}  " alt=""></a>
+    </div>
+    <h1>Upload a PDF File</h1>
+    <form id= 'reupload' action="{% url 'PDF_QNA:upload_pdf' %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% if not uploaded %}
+        <button type="submit" disabled><img id='crs_icon_op' src="{% static 'download.png' %}  " alt=""></button>
+        {% else %}
+        <button type="submit"><img id='crs_icon' src="{% static 'download.png' %}  " alt=""></button>
+        {% endif %}
+    </form>
+    <div id ='pdf_disp_block'>
+        {% if uploaded %}
+        <img id='pdf_icon' src="{% static 'pdf.png' %}  " alt="">
+        <div> {{ file_name }}</div>
+        {% endif %}
+        {% if noupload_msg %}
+        <div>{{ noupload_msg }}</div>
+        {% endif %}
+    </div>
+    <div>
+        <form  action="{% url 'PDF_QNA:upload_pdf' %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file"  name="pdf_file" accept="application/pdf">
+            {% if uploaded %}
+            <button type="submit" disabled>Upload PDF</button>
+            {% else %}
+            <button type="submit">Upload PDF</button>
+            {% endif %}
+        </form>
+        
+        <form id = 'question' action="{% url 'PDF_QNA:qna' %}" method="POST" novalidate>
+            {% csrf_token %}
+            <div><b>Question :</b></div>
+            {{ form }}
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+    <div>
+        <div id = 'txt'><b>Response :</b></div>
+        <div id = 'resp_block'> 
+            {{ response }}
+        </div>
+    </div>
+    
+</body>
+</html>
